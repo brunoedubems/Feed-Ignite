@@ -6,10 +6,11 @@ import { Avatar } from "./Avatar";
 import { Comment } from "./Comment";
 import styles from "./Post.module.css";
 
-
 export function Post({ author, publishedAt, content, index }) {
-  const [comments, setComments] = useState(['Post Muito Bacana!!',])
-  
+  const [comments, setComments] = useState(["Post Muito Bacana!!"]);
+  const [newCommentText, setNewCommentText] = useState('') /*Estados*/ 
+
+
   const publishedDateFormatted = format(
     publishedAt,
     "d 'de' LLLL 'às' HH:mm'h'",
@@ -21,14 +22,19 @@ export function Post({ author, publishedAt, content, index }) {
     addSuffix: true,
   });
 
-function handleCreateNewComment(){
-  event.preventDefault();
-  const newCommentText = event.target.comment.value
+  function handleCreateNewComment() {
+    event.preventDefault();
+    console.log(newCommentText)
 
-setComments([...comments, newCommentText ]);
+    setComments([...comments, newCommentText]);
+    setNewCommentText('')
+  }
 
-event.target.comment.value= '';
-}
+  function handNewCommentChange(){
+   setNewCommentText(event.target.value)
+  }
+
+
 
   return (
     <article className={styles.post}>
@@ -65,11 +71,11 @@ event.target.comment.value= '';
       <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
 
-        <textarea
-        name="comment"
-         placeholder="deixe um comentário" 
-         
-         />
+        <textarea 
+        name="comment" 
+        placeholder="deixe um comentário"
+        value={newCommentText}
+        onChange={handNewCommentChange} />
 
         <footer>
           <button className={styles.buttonComment} type="submit">
@@ -79,14 +85,10 @@ event.target.comment.value= '';
       </form>
 
       <div className={styles.commentList}>
-        {
-        comments.map(comment => {
-           return <Comment content={comment}/> 
-
-        }
-        )}
+        {comments.map((comment) => {
+          return <Comment content={comment} />;
+        })}
       </div>
-
     </article>
   );
 }
